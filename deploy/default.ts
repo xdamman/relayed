@@ -4,7 +4,7 @@ const relay = await run({
   default_policy: {
     allowed_kinds: "all",
   },
-  auth_required: true,
+  auth_required: false,
 });
 if (relay instanceof Error) {
   console.error(relay);
