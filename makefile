@@ -11,7 +11,7 @@ fmt:
 	deno fmt
 
 test: fmt
-	deno test --lock deno.test.lock \
+	deno test \
 		--trace-leaks --unstable-kv \
 		--allow-read=src/queries,data/test.sqlite,data/relayed.db,data/relayed.db-journal \
 		--allow-net --allow-write --allow-ffi \
