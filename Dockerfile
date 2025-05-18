@@ -9,4 +9,4 @@ WORKDIR /app
 # Copy your project files
 COPY . .
 
-CMD ["deno", "run", "--allow-env=PORT,DENO_DEPLOYMENT_ID,DENO_DIR,DENO_SQLITE_PATH,DENO_SQLITE_LOCAL,HOME,relayed_pubkey", "--unstable-kv", "--allow-read=src/queries,data/test.sqlite,data/relayed.db,data/relayed.db-journal", "--allow-write=data/relayed.db,data/relayed.db-journal", "--allow-net", "--allow-ffi", "deploy/default.ts"]
+CMD ["deno", "run", "--allow-env=PORT,NOSTR_RELAY_ADMIN_PUBKEY,DENO_DEPLOYMENT_ID,DENO_DIR,DENO_SQLITE_PATH,DENO_SQLITE_LOCAL,HOME", "--unstable-kv", "--allow-read=src/queries,data/test.sqlite,data/relayed.db,data/relayed.db-journal", "--allow-write=data/relayed.db,data/relayed.db-journal", "--allow-net", "--allow-ffi", "deploy/default.ts"]

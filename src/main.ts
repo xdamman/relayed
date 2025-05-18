@@ -102,7 +102,7 @@ export type Relay = {
   [Symbol.asyncDispose]: () => Promise<void>;
 };
 
-export const ENV_relayed_pubkey = "relayed_pubkey";
+export const ENV_relayed_pubkey = "NOSTR_RELAY_ADMIN_PUBKEY";
 
 export async function run(args: {
   port?: number;
@@ -140,7 +140,7 @@ export async function run(args: {
     const env_pubkey = Deno.env.get(ENV_relayed_pubkey);
     if (env_pubkey == undefined) {
       return new Error(
-        "public key is not set. Please set env var $relayed_pubkey or pass default_information.pubkey in the argument"
+        `public key is not set. Please set env var ${ENV_relayed_pubkey} or pass default_information.pubkey in the argument`
       );
     }
     const p = PublicKey.FromString(env_pubkey);

@@ -6,7 +6,6 @@
 .env.local
 
 .DS_Store
-deploy/default.ts
 *cov_profile*
 coverage
 test.sqlite
