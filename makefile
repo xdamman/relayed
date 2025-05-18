@@ -3,7 +3,7 @@ run: fmt
 		--allow-net \
 		--allow-read=data/relayed.db,data/relayed.db-journal,/Users/mac/Library/Caches/deno/plug \
 		--allow-write=data/relayed.db,data/relayed.db-journal \
-		--allow-env=DENO_DEPLOYMENT_ID,DENO_DIR,DENO_SQLITE_PATH,DENO_SQLITE_LOCAL,HOME,relayed_pubkey \
+		--allow-env=PORT,DENO_DEPLOYMENT_ID,DENO_DIR,DENO_SQLITE_PATH,DENO_SQLITE_LOCAL,HOME,relayed_pubkey \
 		--unstable-kv --unstable-ffi --allow-ffi \
 		deploy/default.ts
 
@@ -15,7 +15,7 @@ test: fmt
 		--trace-leaks --unstable-kv \
 		--allow-read=src/queries,data/test.sqlite,data/relayed.db,data/relayed.db-journal \
 		--allow-net --allow-write --allow-ffi \
-		--allow-env=DENO_DEPLOYMENT_ID,DENO_DIR,HOME,relayed_pubkey \
+		--allow-env=PORT,DENO_DEPLOYMENT_ID,DENO_DIR,HOME,relayed_pubkey \
 		--coverage \
 		src/tests/*.ts
 
