@@ -109,13 +109,16 @@ export async function run(args: {
     // SQLite Database
     let db: DB | undefined;
     let get_channel_by_id: func_GetChannelByID;
-    db = new DB("relayed.db");
+    db = new DB("./data/relayed.db");
     db.execute(`${sqlite_schema}${event_schema_sqlite}`);
     get_channel_by_id = get_channel_by_id_sqlite(db);
     const write_replaceable_event = write_replaceable_event_sqlite(db);
     const write_regular_event = write_regular_event_sqlite(db);
     const get_event_count = get_event_count_sqlite(db);
-    const get_events_by_filter = get_events_by_filter_sqlite(db, args._debug || false);
+    const get_events_by_filter = get_events_by_filter_sqlite(
+        db,
+        args._debug || false,
+    );
 
     // Administrator Keys
     if (args.admin == undefined) {
@@ -162,13 +165,10 @@ export async function run(args: {
         initial_policies: await get_all_policies(),
         kv,
     });
-    const relayInformationStore = new RelayInformationStore(
-        kv,
-        {
-            ...args.default_information,
-            pubkey: args.admin,
-        },
-    );
+    const relayInformationStore = new RelayInformationStore(kv, {
+        ...args.default_information,
+        pubkey: args.admin,
+    });
 
     const port = args.port || 8000;
     delete args.port;
@@ -176,8 +176,12 @@ export async function run(args: {
         {
             port,
             onListen: ({ hostname, port }) => {
-                console.log(`☁  Relay server        started on   ws://${hostname}:${port}`);
-                console.log(`☁  Relay admin GraphQL started on http://${hostname}:${port}/api`);
+                console.log(
+                    `☁  Relay server        started on   ws://${hostname}:${port}`,
+                );
+                console.log(
+                    `☁  Relay admin GraphQL started on http://${hostname}:${port}/api`,
+                );
                 resolve_hostname(hostname);
             },
         },
@@ -255,36 +259,34 @@ export async function run(args: {
     };
 }
 
-const root_handler = (
-    args: {
-        connections: Map<WebSocket, SubscriptionMap>;
-        default_policy: DefaultPolicy;
-        resolvePolicyByKind: func_ResolvePolicyByKind;
-        policyStore: PolicyStore;
-        relayInformationStore: RelayInformationStore;
-        // channel
-        create_channel: func_CreateChannel;
-        edit_channel: func_EditChannel;
-        // deletion
-        delete_event: func_DeleteEvent;
-        delete_events_from_pubkey: func_DeleteEventsFromPubkey;
-        // get
-        get_deleted_event_ids: func_GetDeletedEventIDs;
-        get_events_by_filter: func_GetEventsByFilter;
-        get_event_count: func_GetEventCount;
-        // write
-        write_regular_event: func_WriteRegularEvent;
-        write_replaceable_event: func_WriteReplaceableEvent;
-        // space member
-        get_space_members: func_GetSpaceMembers;
-        add_space_member: func_AddSpaceMember;
-        is_space_member: func_IsSpaceMember;
-        // config
-        auth_required: boolean;
-        kv: Deno.Kv;
-        _debug: boolean;
-    },
-) =>
+const root_handler = (args: {
+    connections: Map<WebSocket, SubscriptionMap>;
+    default_policy: DefaultPolicy;
+    resolvePolicyByKind: func_ResolvePolicyByKind;
+    policyStore: PolicyStore;
+    relayInformationStore: RelayInformationStore;
+    // channel
+    create_channel: func_CreateChannel;
+    edit_channel: func_EditChannel;
+    // deletion
+    delete_event: func_DeleteEvent;
+    delete_events_from_pubkey: func_DeleteEventsFromPubkey;
+    // get
+    get_deleted_event_ids: func_GetDeletedEventIDs;
+    get_events_by_filter: func_GetEventsByFilter;
+    get_event_count: func_GetEventCount;
+    // write
+    write_regular_event: func_WriteRegularEvent;
+    write_replaceable_event: func_WriteReplaceableEvent;
+    // space member
+    get_space_members: func_GetSpaceMembers;
+    add_space_member: func_AddSpaceMember;
+    is_space_member: func_IsSpaceMember;
+    // config
+    auth_required: boolean;
+    kv: Deno.Kv;
+    _debug: boolean;
+}) =>
 async (req: Request, info: Deno.ServeHandlerInfo) => {
     if (args._debug) {
         console.log(req);
@@ -327,27 +329,25 @@ async (req: Request, info: Deno.ServeHandlerInfo) => {
     return resp;
 };
 
-const graphql_handler = (
-    args: {
-        // policy
-        policyStore: PolicyStore;
-        // relay info
-        relayInformationStore: RelayInformationStore;
-        // get
-        get_events_by_filter: func_GetEventsByFilter;
-        get_event_count: func_GetEventCount;
-        get_space_members: func_GetSpaceMembers;
-        // write
-        write_regular_event: func_WriteRegularEvent;
-        write_replaceable_event: func_WriteReplaceableEvent;
-        // deletion
-        delete_event: func_DeleteEvent;
-        delete_events_from_pubkey: func_DeleteEventsFromPubkey;
-        get_deleted_event_ids: func_GetDeletedEventIDs;
-        // kv
-        kv: Deno.Kv;
-    },
-) =>
+const graphql_handler = (args: {
+    // policy
+    policyStore: PolicyStore;
+    // relay info
+    relayInformationStore: RelayInformationStore;
+    // get
+    get_events_by_filter: func_GetEventsByFilter;
+    get_event_count: func_GetEventCount;
+    get_space_members: func_GetSpaceMembers;
+    // write
+    write_regular_event: func_WriteRegularEvent;
+    write_replaceable_event: func_WriteReplaceableEvent;
+    // deletion
+    delete_event: func_DeleteEvent;
+    delete_events_from_pubkey: func_DeleteEventsFromPubkey;
+    get_deleted_event_ids: func_GetDeletedEventIDs;
+    // kv
+    kv: Deno.Kv;
+}) =>
 async (req: Request) => {
     if (req.method == "POST") {
         try {
@@ -360,21 +360,27 @@ async (req: Request) => {
 
             const rawEvent = atobSafe(token);
             if (rawEvent instanceof Error) {
-                return new Response(JSON.stringify({
-                    errors: [`${rawEvent.message}`],
-                }));
+                return new Response(
+                    JSON.stringify({
+                        errors: [`${rawEvent.message}`],
+                    }),
+                );
             }
             const event = parseJSON<NostrEvent>(rawEvent);
             if (event instanceof Error) {
-                return new Response(JSON.stringify({
-                    errors: [`${event.message}`],
-                }));
+                return new Response(
+                    JSON.stringify({
+                        errors: [`${event.message}`],
+                    }),
+                );
             }
             const error = await verifyToken(event, args.relayInformationStore);
             if (error instanceof Error) {
-                return new Response(JSON.stringify({
-                    errors: [error.message],
-                }));
+                return new Response(
+                    JSON.stringify({
+                        errors: [error.message],
+                    }),
+                );
             }
             const result = await gql.graphql({
                 schema: schema,
@@ -384,9 +390,11 @@ async (req: Request) => {
             });
             return new Response(JSON.stringify(result));
         } catch (error) {
-            return new Response(JSON.stringify({
-                errors: [`${error}`],
-            }));
+            return new Response(
+                JSON.stringify({
+                    errors: [`${error}`],
+                }),
+            );
         }
     } else if (req.method == "GET") {
         const res = new Response(graphiql);
@@ -426,7 +434,9 @@ const graphql_login_handler =
         }
     };
 
-const members_handler = async (args: { get_space_members: func_GetSpaceMembers }) => {
+const members_handler = async (args: {
+    get_space_members: func_GetSpaceMembers;
+}) => {
     const members = await args.get_space_members();
     if (members instanceof Error) {
         console.error(members);
@@ -440,19 +450,21 @@ const members_handler = async (args: { get_space_members: func_GetSpaceMembers }
     return resp;
 };
 
-const landing_handler = async (args: { relayInformationStore: RelayInformationStore }) => {
+const landing_handler = async (args: {
+    relayInformationStore: RelayInformationStore;
+}) => {
     const storeInformation = await args.relayInformationStore.resolveRelayInformation();
     if (storeInformation instanceof Error) {
         return new Response(render(Error404()), { status: 404 });
     }
-    const resp = new Response(
-        render(Landing(storeInformation), { status: 200 }),
-    );
+    const resp = new Response(render(Landing(storeInformation), { status: 200 }));
     resp.headers.set("content-type", "html");
     return resp;
 };
 
-const information_handler = async (args: { relayInformationStore: RelayInformationStore }) => {
+const information_handler = async (args: {
+    relayInformationStore: RelayInformationStore;
+}) => {
     const storeInformation = await args.relayInformationStore.resolveRelayInformation();
     if (storeInformation instanceof Error) {
         return new Response(render(Error404()), { status: 404 });
@@ -510,8 +522,11 @@ async (req: Request) => {
     }
 };
 
-async function verifyToken(event: NostrEvent, relayInformationStore: RelayInformationStore) {
-    if (!await verifyEvent(event)) {
+async function verifyToken(
+    event: NostrEvent,
+    relayInformationStore: RelayInformationStore,
+) {
+    if (!(await verifyEvent(event))) {
         return new Error("token not verified");
     }
     const pubkey = PublicKey.FromString(event.pubkey);

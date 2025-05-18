@@ -8,9 +8,9 @@ import { run } from "../main.ts";
 const test_ctx = InMemoryAccountContext.Generate();
 const test_kv = async () => {
     try {
-        await Deno.remove("test.sqlite");
+        await Deno.remove("data/test.sqlite");
     } catch (e) {}
-    return await Deno.openKv("test.sqlite");
+    return await Deno.openKv("data/test.sqlite");
 };
 
 Deno.test({

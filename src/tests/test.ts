@@ -23,9 +23,9 @@ import { sleep } from "jsr:@blowater/csp@1.0.0";
 
 const test_kv = async () => {
     try {
-        await Deno.remove("test.sqlite");
+        await Deno.remove("data/test.sqlite");
     } catch (e) {}
-    return await Deno.openKv("test.sqlite");
+    return await Deno.openKv("data/test.sqlite");
 };
 
 const test_ctx = InMemoryAccountContext.Generate();
@@ -245,7 +245,7 @@ Deno.test({
         });
 
         await t.step("graphql get relay information", async () => {
-            const query = await Deno.readTextFile("./queries/getRelayInformation.gql");
+            const query = await Deno.readTextFile("./src/queries/getRelayInformation.gql");
             const json = await queryGql(relay, query);
             assertEquals(json.data.relayInformation, {
                 name: "Nostr Relay2",
@@ -265,7 +265,7 @@ Deno.test({
             const variables = {
                 name: "Nostr Relay3",
             };
-            const query = await Deno.readTextFile("./queries/setRelayInformation.gql");
+            const query = await Deno.readTextFile("./src/queries/setRelayInformation.gql");
             const json = await queryGql(relay, query, variables);
             assertEquals(json.data.set_relay_information, {
                 name: "Nostr Relay3",

@@ -1,10 +1,11 @@
-import { run } from "https://raw.githubusercontent.com/BlowaterNostr/relayed/main/main.tsx";
+import { run } from "../src/main.ts";
 
 const relay = await run({
     port: 8000,
     default_policy: {
         allowed_kinds: "all",
     },
+    admin: "", // pubkey of the admin
     auth_required: true,
 });
 if (relay instanceof Error) {

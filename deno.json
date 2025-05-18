@@ -1,4 +1,8 @@
 {
+    "tasks": {
+        "start": "deno run -A --unstable-kv deploy/default.ts",
+        "test": "deno test --lock deno.test.lock --trace-leaks --unstable-kv --allow-read=src/queries,data/test.sqlite,data/relayed.db,data/relayed.db-journal --allow-net --allow-write --allow-ffi --allow-env=DENO_DEPLOYMENT_ID,DENO_DIR,HOME,relayed_pubkey --coverage src/tests/*.ts"
+    },
     "lint": {
         "rules": {
             "tags": [
@@ -37,7 +41,13 @@
     "fmt": {
         "indentWidth": 4,
         "lineWidth": 110,
-        "exclude": ["cov_profile", "coverage"]
+        "exclude": [
+            "cov_profile",
+            "coverage"
+        ]
     },
-    "lock": false
+    "lock": false,
+    "engines": {
+        "deno": ">=2.3.0"
+    }
 }
