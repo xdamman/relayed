@@ -1,17 +1,14 @@
 # Relayed
 
-[![deno module](https://shield.deno.dev/x/relayed)](https://deno.land/x/relayed)
-
-> [!IMPORTANT] Make Small Relay Great for the first time!
 
 Relayed is lightweight relay written in Deno.
 
-- built-in database
-- GraphQL API for relay management
+- sqlite database
+- GraphQL API for relay management with built-in GraphQL playground (using graphiql)
 
 ## Quick Start
 
-1. Install Deno at https://deno.land/manual/getting_started/installation.
+1. [Install Deno](https://deno.land/manual/getting_started/installation)
 
 2. Next, create a file named `deploy/default.ts`:
 
@@ -22,10 +19,10 @@ cp deploy/example.ts deploy/default.ts
 After that, launch the project with the command:
 
 ```bash
-relayed_pw=123whatever deno task start
+$> deno task start
 ```
 
-Finally, open your browser and go to http://localhost:8080/api to access the GraphQL playground.
+Finally, open your browser and go to http://localhost:8080/api to access the GraphQL playground. Use your Nostr Browser Extension to login (make sure to register your Nostr pubkey as the admin key in `deploy/default.ts`).
 
 ### Use GraphQL Playground
 
